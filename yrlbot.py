@@ -327,7 +327,7 @@ def first(message):
         bot.send_document(message.chat.id, file_to_send)
         file_to_send.close()
 
-    #os.remove('feed_report.xlsx')
+    os.remove('feed_report.xlsx')
 
 def telegram_polling():
     try:
