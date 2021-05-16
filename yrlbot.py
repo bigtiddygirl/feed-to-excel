@@ -6,6 +6,7 @@ import config
 from bs4 import BeautifulSoup as bs
 import pyexcel as pe
 import re
+import pandas as pd
 
 bot = telebot.TeleBot(config.token)
 offers = []
@@ -321,13 +322,56 @@ def first(message):
 
 
     pe.save_as(records=offers, dest_file_name='feed_report.xlsx')
+    bot.send_message(message.chat.id, "Отправаь xls файл с ошибками из личного кабинета")
+    #with open('feed_report.xlsx', 'rb') as file2send:
 
-    with open('feed_report.xlsx', 'rb') as file_to_send:
+    #    bot.send_document(message.chat.id, file2send)
+    #    file2send.close()
 
-        bot.send_document(message.chat.id, file_to_send)
-        file_to_send.close()
+    #os.remove('feed_report.xlsx')
 
-    os.remove('feed_report.xlsx')
+@bot.message_handler(content_types=["document"])
+def handle_docs_audio(message):
+    try:
+        save_dir = os.getcwd()
+        file_name = message.document.file_name
+        file_id = message.document.file_name
+        file_id_info = bot.get_file(message.document.file_id)
+        downloaded = bot.download_file(file_id_info.file_path)
+        src = file_name
+        with open(save_dir + "/" + src, 'wb') as new_file:
+            new_file.write(downloaded)
+        bot.send_message(message.chat.id, "[*] Файл добавлен\nПрикрепляю ошибки и описание к таблице")
+        os.rename(file_name, "report.xls")
+
+        feed = pd.read_excel('feed_report.xlsx')
+        errors = pd.read_excel('report.xls')
+        del errors ['Яндекс ID']
+        del errors ['Заголовок кластера']
+        merged_tables = pd.merge(feed, errors, how='left', on='Внутренний ID')
+
+        descript = pd.read_excel('descr2.xlsx')
+        del descript ['Описание кода ошибки']
+        with_errors = pd.merge(merged_tables, descript, how='left', on='Код ошибки')
+
+        filename = 'merged_table.xlsx'
+        with_errors.to_excel(filename, index=False)
+
+        with open('merged_table.xlsx', 'rb') as file_to_send:
+
+            bot.send_document(message.chat.id, file_to_send)
+            file_to_send.close()
+
+
+        
+
+        os.remove("report.xls")
+        os.remove("feed_report.xlsx")
+        os.remove("merged_table.xlsx")
+
+    except Exception as ex:
+        bot.send_message(message.chat.id, "[!] ошибка - {}".format(str(ex)) + "\nНажмите --> /start и дождитесь ответа от бота")
+
 
 def telegram_polling():
     try:
