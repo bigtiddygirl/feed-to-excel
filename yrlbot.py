@@ -15,7 +15,7 @@ categorys = ['часть дома','квартира','flat','таунхаус',
 @bot.message_handler(commands=['start'])
 def start_handler(message):
     try:
-        bot.send_message(message.chat.id, "Отправь ссылку на фид")
+        bot.send_message(message.chat.id, "Отправь ссылку на фид, для конвретации в таблицу")
     except Exception as ex:
         bot.send_message(message.chat.id, "[!] ошибка - {}".format(str(ex)))
         telegram_polling()
@@ -322,12 +322,12 @@ def first(message):
 
 
     pe.save_as(records=offers, dest_file_name='feed_report.xlsx')
-    bot.send_message(message.chat.id, "Отправаь xls файл с ошибками из личного кабинета")
-    #with open('feed_report.xlsx', 'rb') as file2send:
+    
+    with open('feed_report.xlsx', 'rb') as file2send:
 
-    #    bot.send_document(message.chat.id, file2send)
-    #    file2send.close()
-
+        bot.send_document(message.chat.id, file2send)
+        file2send.close()
+    bot.send_message(message.chat.id, "Отправь xls файл с ошибками из личного кабинета, если нужно прикрепить к офферам описаание ошибки")
     #os.remove('feed_report.xlsx')
 
 @bot.message_handler(content_types=["document"])
