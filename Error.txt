@@ -1,3 +1,5 @@
 
 <<ERROR polling>>
  - Invalid URL 'выф': No schema supplied. Perhaps you meant http://выф?
+<<ERROR polling>>
+ - No connection adapters were found for '\\\nhttps://verges.ru/upload/ya_newflat.xml'

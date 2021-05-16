@@ -15,7 +15,7 @@ categorys = ['часть дома','квартира','flat','таунхаус',
 @bot.message_handler(commands=['start'])
 def start_handler(message):
     try:
-        bot.send_message(message.chat.id, "Отправь ссылку на фид, для конвретации в таблицу")
+        bot.send_message(message.chat.id, "Отправь ссылку на фид для конвертации в таблицу")
     except Exception as ex:
         bot.send_message(message.chat.id, "[!] ошибка - {}".format(str(ex)))
         telegram_polling()
