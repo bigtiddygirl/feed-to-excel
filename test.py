@@ -9,28 +9,25 @@ import re
 import pandas as pd
 
 bot = telebot.TeleBot(config.token)
-offers = []
-categorys = ['часть дома','квартира','flat','таунхаус', 'townhouse','дуплекс','duplex','дача', 'коттедж','cottage','дом', 'house']
+
 
 @bot.message_handler(commands=['start'])
 def start_handler(message):
-    try:
-        bot.send_message(message.chat.id, "Отправь ссылку на фид для конвертации в таблицу")
-    except Exception as ex:
-        bot.send_message(message.chat.id, "[!] ошибка - {}".format(str(ex)))
-        telegram_polling()
-    
-    
-    
+    bot.send_message(message.chat.id, "Отправь ссылку на фид для конвертации в таблицу")
+        
 @bot.message_handler(content_types=["text"]) 
 def first(message):
-    HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.41 YaBrowser/21.2.0.1122 Yowser/2.5 Safari/537.36'
-    }
+    #HEADERS = {
+    #'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.41 YaBrowser/21.2.0.1122 Yowser/2.5 Safari/537.36'
+    #}
     bot.send_message(message.chat.id, "Создаю таблицу")
-    response = requests.get(message.text, headers=HEADERS)
+    response = requests.get(message.text)#, headers=HEADERS)
     soup = bs(response.content, 'xml')
     offer = soup.find_all('offer')
+
+    offers = []
+    offers2 = []
+    categorys = ['часть дома','квартира','flat','таунхаус', 'townhouse','дуплекс','duplex','дача', 'коттедж','cottage','дом', 'house']
 
     for item in offer:
         errors = []
@@ -76,8 +73,6 @@ def first(message):
         if category is None:
             category = ' - '
 
-            
-
         price = item.find('price')
         if price:
             price = price.get_text()
@@ -112,8 +107,6 @@ def first(message):
             floors_total = floors_total.get_text()
         if floors_total is None:
             floors_total = ' - '
-
-        
 
         country = item.find('country')
         if country:
@@ -260,15 +253,6 @@ def first(message):
         if buildstate is None:
             buildstate = ' - '
 
-        #if len(errors) > 0:
-        #    status = 'есть ошибка'
-        #if len(errors) == 0:
-        #    status = ''
-        #if len(newbuilding_errors) > 0:
-        #    newbuilding_status = 'ошибка в новостройках'
-        #if len(newbuilding_errors) == 0:
-        #    newbuilding_status = ''
-
         latitude = item.find('latitude')
         if latitude:
             latitude = latitude.get_text()
@@ -280,6 +264,18 @@ def first(message):
             longitude = longitude.get_text()
         if longitude is None:
             longitude = ' - '
+
+        phone = item.find('phone')
+        if phone:
+            phone = phone.get_text()
+        if phone is None:
+            phone = ' - '
+
+        salesname = item.find('name')
+        if salesname:
+            salesname = salesname.get_text()
+        if salesname is None:
+            salesname = ' - '
 
         offers.append({
             'price':price.strip(),
@@ -315,24 +311,38 @@ def first(message):
             'location7\nlongitude':longitude,
             'studio':studio.strip(),
             'количество\nфотографий':count_images,
-            #'наличие ошибки в\nобязательных тегах':status,
-            #'наличие ошибки в\nтегах для новостроек':newbuilding_status,
+            'номер телефона':phone,
+            'имя агента':salesname,
             })    
 
+        offers2.append({
+            'Внутренний ID':offer.strip(), 
+            'type':type_offer.strip(),
+            'category':category.strip(),
+            'количество\nфотографий':count_images,
+            'номер телефона':phone,
+            'имя агента':salesname,
+            })    
 
-
-    pe.save_as(records=offers, dest_file_name='feed_report.xlsx')
+    nametable1 = 'фид' + str(message.chat.id) + '.xlsx'
+    pe.save_as(records=offers, dest_file_name=nametable1)
     
-    with open('feed_report.xlsx', 'rb') as file2send:
+    nametable2 = 'без тегов ' + str(message.chat.id) + '.xlsx'
+    pe.save_as(records=offers2, dest_file_name=nametable2)
 
+    with open(nametable1, 'rb') as file2send:
         bot.send_document(message.chat.id, file2send)
         file2send.close()
-    bot.send_message(message.chat.id, "Отправь xls файл с ошибками из личного кабинета, если нужно прикрепить к офферам описаание ошибки")
-    #os.remove('feed_report.xlsx')
+    
+    bot.send_message(message.chat.id, "Отправь xls файл с ошибками из личного кабинета, если нужно прикрепить к офферам описание ошибки")
+    offers = []
+    offfers2 = []
 
 @bot.message_handler(content_types=["document"])
 def handle_docs_audio(message):
     try:
+        nametable1 = 'фид' + str(message.chat.id) + '.xlsx'
+        nametable2 = 'без тегов ' + str(message.chat.id) + '.xlsx'
         save_dir = os.getcwd()
         file_name = message.document.file_name
         file_id = message.document.file_name
@@ -341,34 +351,41 @@ def handle_docs_audio(message):
         src = file_name
         with open(save_dir + "/" + src, 'wb') as new_file:
             new_file.write(downloaded)
+            new_file.close()
         bot.send_message(message.chat.id, "[*] Файл добавлен\nПрикрепляю ошибки и описание к таблице")
         os.rename(file_name, "report.xls")
 
-        feed = pd.read_excel('feed_report.xlsx')
-        errors = pd.read_excel('report.xls')
-        del errors ['Яндекс ID']
+
+        feed = pd.read_excel(nametable1).astype(str)
+        feed2 = pd.read_excel(nametable2).astype(str)
+        errors = pd.read_excel('report.xls').astype(str)
+        descript = pd.read_excel('descr4.xlsx')
         del errors ['Заголовок кластера']
+
         merged_tables = pd.merge(feed, errors, how='left', on='Внутренний ID')
+        with_errors = pd.merge(merged_tables, descript, how='inner', on='Код ошибки')
+        
+        merged_tables2 = pd.merge(feed2, errors, how='left', on='Внутренний ID')
+        with_errors2 = pd.merge(merged_tables2, descript, how='inner', on='Код ошибки')
 
-        descript = pd.read_excel('descr2.xlsx')
-        del descript ['Описание кода ошибки']
-        with_errors = pd.merge(merged_tables, descript, how='left', on='Код ошибки')
+        filename1 = 'ошибки с тегами ' + str(message.chat.id) + '.xlsx'
+        with_errors.to_excel(filename1, index=False)
+        filename2 = 'ошибки без тегов ' + str(message.chat.id) + '.xlsx'
+        with_errors2.to_excel(filename2, index=False)
 
-        filename = 'merged_table.xlsx'
-        with_errors.to_excel(filename, index=False)
-
-        with open('merged_table.xlsx', 'rb') as file_to_send:
-
+        with open(filename1, 'rb') as file_to_send:
+            bot.send_document(message.chat.id, file_to_send)
+            file_to_send.close()
+        with open(filename2, 'rb') as file_to_send:
             bot.send_document(message.chat.id, file_to_send)
             file_to_send.close()
 
-
-        
-
         os.remove("report.xls")
-        os.remove("feed_report.xlsx")
-        os.remove("merged_table.xlsx")
-
+        os.remove(nametable1)
+        os.remove(nametable2)
+        os.remove(filename1)
+        os.remove(filename2)
+        bot.send_message(message.chat.id, "Готово, отправь ссылку на фид, если понадобится снова")
     except Exception as ex:
         bot.send_message(message.chat.id, "[!] ошибка - {}".format(str(ex)) + "\nНажмите --> /start и дождитесь ответа от бота")
 

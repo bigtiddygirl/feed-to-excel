@@ -3,3 +3,57 @@
  - Invalid URL 'выф': No schema supplied. Perhaps you meant http://выф?
 <<ERROR polling>>
  - No connection adapters were found for '\\\nhttps://verges.ru/upload/ya_newflat.xml'
+<<ERROR polling>>
+ - HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot1825946460:AAEPHCtwDWBDR25ZKzT-kvZo5PmTcregHJE/getUpdates?offset=1&timeout=20 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x11fd0a430>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+<<ERROR polling>>
+ - HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot1825946460:AAEPHCtwDWBDR25ZKzT-kvZo5PmTcregHJE/getUpdates?offset=1&timeout=20 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x12019d670>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+<<ERROR polling>>
+ - HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot1825946460:AAEPHCtwDWBDR25ZKzT-kvZo5PmTcregHJE/getUpdates?offset=1&timeout=20 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x1202f4dc0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+<<ERROR polling>>
+ - HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot1825946460:AAEPHCtwDWBDR25ZKzT-kvZo5PmTcregHJE/getUpdates?offset=1&timeout=20 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x11daf12e0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known'))
+<<ERROR polling>>
+ - ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+<<ERROR polling>>
+ - Invalid URL 'topnlab.ru/export/yandex/cVZ1REZiZklsTm1idmNERzRYST0,/feed.xml': No schema supplied. Perhaps you meant http://topnlab.ru/export/yandex/cVZ1REZiZklsTm1idmNERzRYST0,/feed.xml?
+<<ERROR polling>>
+ - Invalid URL 'topnlab.ru/export/yandex/cVZ1REZiZklsTm1idmNERzRYST0,/feed.xml': No schema supplied. Perhaps you meant http://topnlab.ru/export/yandex/cVZ1REZiZklsTm1idmNERzRYST0,/feed.xml?
+<<ERROR polling>>
+ - Invalid URL 'topnlab.ru/export/yandex/cVZ1REZiZklsTm1idmNERzRYST0,/feed.xml': No schema supplied. Perhaps you meant http://topnlab.ru/export/yandex/cVZ1REZiZklsTm1idmNERzRYST0,/feed.xml?
+<<ERROR polling>>
+ - Invalid URL 'topnlab.ru/export/yandex/cVZ1REZiZklsTm1idmNERzRYST0,/feed.xml': No schema supplied. Perhaps you meant http://topnlab.ru/export/yandex/cVZ1REZiZklsTm1idmNERzRYST0,/feed.xml?
+<<ERROR polling>>
+ - Invalid URL '\\start': No schema supplied. Perhaps you meant http://\start?
+<<ERROR polling>>
+ - ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+<<ERROR polling>>
+ - [Errno 2] No such file or directory: '/Users/a-demeshko/tgbot/TOEXCEL310458804/feed_report.xlsx'
+<<ERROR polling>>
+ - [Errno 17] File exists: '/Users/a-demeshko/tgbot/TOEXCEL310458804'
+<<ERROR polling>>
+ - [Errno 17] File exists: '/Users/a-demeshko/tgbot/TOEXCEL310458804'
+<<ERROR polling>>
+ - ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+<<ERROR polling>>
+ - [Errno 2] No such file or directory: 'https://grannel.ru/feed/1.xlsx'
+<<ERROR polling>>
+ - [Errno 2] No such file or directory: 'https://grannel.ru/feed/1.xlsx'
+<<ERROR polling>>
+ - [Errno 2] No such file or directory: 'https://grannel.ru/feed/1.xlsx'
+<<ERROR polling>>
+ - [Errno 2] No such file or directory: 'https://grannel.ru/feed/1.xlsx'
+<<ERROR polling>>
+ - Invalid URL '533606618': No schema supplied. Perhaps you meant http://533606618?
+<<ERROR polling>>
+ - Invalid URL 'puzzlerealty.yucrm.ru/export/advertise?portal=yandex&mediaplan=10&hash=ec15eda6': No schema supplied. Perhaps you meant http://puzzlerealty.yucrm.ru/export/advertise?portal=yandex&mediaplan=10&hash=ec15eda6?
+<<ERROR polling>>
+ - ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+<<ERROR polling>>
+ - local variable 'offers' referenced before assignment
+<<ERROR polling>>
+ - local variable 'offers' referenced before assignment
+<<ERROR polling>>
+ - ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+<<ERROR polling>>
+ - ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+<<ERROR polling>>
+ - HTTPSConnectionPool(host='api.telegram.org', port=443): Read timed out. (read timeout=9999)
