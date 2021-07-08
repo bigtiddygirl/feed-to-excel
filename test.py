@@ -17,11 +17,12 @@ def start_handler(message):
         
 @bot.message_handler(content_types=["text"]) 
 def first(message):
-    #HEADERS = {
-    #'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.41 YaBrowser/21.2.0.1122 Yowser/2.5 Safari/537.36'
-    #}
+    HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.41 YaBrowser/21.2.0.1122 Yowser/2.5 Safari/537.36'
+    }
+    URL = message.text
     bot.send_message(message.chat.id, "Создаю таблицу")
-    response = requests.get(message.text)#, headers=HEADERS)
+    response = requests.get(URL, headers=HEADERS)
     soup = bs(response.content, 'xml')
     offer = soup.find_all('offer')
 
