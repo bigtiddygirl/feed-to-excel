@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup as bs
 import pyexcel as pe
 import re
 import pandas as pd
+from collections import Counter
 
 bot = telebot.TeleBot(config.token)
 
@@ -381,12 +382,24 @@ def handle_docs_audio(message):
             bot.send_document(message.chat.id, file_to_send)
             file_to_send.close()
 
+        sheet = pe.get_sheet(file_name=filename2, name_columns_by_row=0)
+        errors = sheet.column[-3]
+        description = sheet.column[-2]
+
+        e = Counter(errors).most_common(3)
+        d = Counter(description).most_common(3)
+
         os.remove("report.xls")
         os.remove(nametable1)
         os.remove(nametable2)
         os.remove(filename1)
         os.remove(filename2)
-        bot.send_message(message.chat.id, "Готово, отправь ссылку на фид, если понадобится снова")
+        bot.send_message(message.chat.id, f"""Всего ошибок в фиде: {len(errors)}\n
+Наиболее распространенные ошибки:
+1) код ошибки - {e[0][0]}, количество ошибок - {e[0][1]}, описание ошибки - {d[0][0]};\n
+2) код ошибки - {e[1][0]}, количество ошибок - {e[1][1]}, описание ошибки - {d[1][0]};\n
+3) код ошибки - {e[2][0]}, количество ошибок - {e[2][1]}, описание ошибки - {d[2][0]}.\n
+""")
     except Exception as ex:
         bot.send_message(message.chat.id, "[!] ошибка - {}".format(str(ex)) + "\nНажмите --> /start и дождитесь ответа от бота")
 
